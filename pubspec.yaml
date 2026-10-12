@@ -1,0 +1,20 @@
+name: telve
+description: Telve - Fal ve Sohbet
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.2
+  image_picker: ^1.1.2
+  shared_preferences: ^2.3.2
+  firebase_core: ^3.6.0
+  cloud_firestore: ^5.4.4
+  in_app_purchase: ^3.2.0
+
+flutter:
+  uses-material-design: true

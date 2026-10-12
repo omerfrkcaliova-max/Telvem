@@ -1,0 +1,26 @@
+workflows:
+  telve-apk:
+    name: Telve APK
+    max_build_duration: 40
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+    scripts:
+      - name: Android klasorunu olustur
+        script: |
+          mkdir -p /tmp/keep && cp main.dart config.dart pubspec.yaml /tmp/keep/
+          flutter create --org com.telve --project-name telve --platforms android .
+          mkdir -p lib && cp /tmp/keep/main.dart /tmp/keep/config.dart lib/
+          cp /tmp/keep/pubspec.yaml pubspec.yaml
+          rm -rf test
+      - name: Android ayarlari
+        script: |
+          sed -i.bak 's/minSdk = flutter.minSdkVersion/minSdk = 24/; s/minSdkVersion flutter.minSdkVersion/minSdkVersion 24/' android/app/build.gradle* || true
+          sed -i.bak 's#<application#<uses-permission android:name="android.permission.INTERNET"/><uses-permission android:name="android.permission.CAMERA"/><application#' android/app/src/main/AndroidManifest.xml
+          sed -i.bak 's/android:label="[^"]*"/android:label="Telve"/' android/app/src/main/AndroidManifest.xml
+      - name: Paketler
+        script: flutter pub get
+      - name: APK derle
+        script: flutter build apk --release
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
